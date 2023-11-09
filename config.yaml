@@ -1,0 +1,12 @@
+es:
+  host: hh
+  port: 9200
+  username: admin
+  password: xx
+
+mysql:
+  host: hh
+  port: 3306
+  username: readonly
+  password: xx
+  database: advc

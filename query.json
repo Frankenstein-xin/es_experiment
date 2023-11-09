@@ -1,0 +1,22 @@
+{
+  "from": 0,
+  "size": 50,
+  "track_total_hits": true,
+  "_source":{
+    "includes":["file_id"]
+  },
+  "query": {
+    "bool":{
+      "must": [
+        {"term":{"tenant_id": 2100095994}},
+        {"term":{"project_id": "Project-38428c7a2842"}},
+        {"terms": {"status": ["TOBE_UPDATED", "PART_AVAILABLE", "READY"]}}
+      ]
+    }
+  },
+  "sort": {
+    "ready_time": {
+      "order": "desc"
+    }
+  }
+}
