@@ -1,12 +1,12 @@
 es:
-  host: hh
+  host: xxx
   port: 9200
   username: admin
-  password: xx
+  password: xxx
 
 mysql:
-  host: hh
+  host: xxx
   port: 3306
   username: readonly
-  password: xx
+  password: xxx
   database: advc

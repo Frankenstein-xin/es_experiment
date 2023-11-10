@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 func init() {
@@ -13,7 +14,15 @@ func init() {
 	utils.MustInitMysqlClient(&utils.GetConfig().MysqlConfig)
 }
 
+func timeCost(start time.Time) {
+	tc := time.Since(start)
+	log.Printf("Total time cost: %v\n", tc)
+}
+
 func main() {
+
+	defer timeCost(time.Now())
+
 	currDir, _ := os.Getwd()
 	queryPath := filepath.Join(currDir, "query.json")
 
@@ -36,7 +45,5 @@ func main() {
 		bagIds = append(bagIds, bagId)
 	}
 
-	bags := utils.MysqlQuery(utils.GetMysqlCli(), bagIds)
-
-	log.Printf("bag size: %d\n", len(bags))
+	utils.MysqlQuery(utils.GetMysqlCli(), bagIds)
 }

@@ -11,6 +11,7 @@ import (
 	"io/fs"
 	"log"
 	"os"
+	"time"
 
 	es7 "github.com/elastic/go-elasticsearch/v7"
 )
@@ -71,7 +72,7 @@ func ESQuery(cli *es7.Client, query io.Reader) map[string]interface{} {
 	}
 	// Print the response status, number of results, and request duration.
 	log.Printf(
-		"[%s] %d hits; took: %dms",
+		"[%s] %d ES hits; took: %dms",
 		res.Status(),
 		int(result["hits"].(map[string]interface{})["total"].(map[string]interface{})["value"].(float64)),
 		int(result["took"].(float64)),
@@ -82,10 +83,17 @@ func ESQuery(cli *es7.Client, query io.Reader) map[string]interface{} {
 
 func MysqlQuery(cli *gorm.DB, fileIds []string) []*model.RawBagStruct {
 
+	start := time.Now()
+
 	rawBags := make([]*model.RawBagStruct, 0)
-	err := GetMysqlCli().Where("file_id in (?) ", fileIds).Find(&rawBags).Error
+	err := cli.Where("file_id in (?) ", fileIds).Find(&rawBags).Error
 	if err != nil {
 		log.Fatalf("MysqlQuery err %v", err)
 	}
+
+	tc := time.Since(start)
+
+	log.Printf("Mysql query take: %v with %d records", tc, len(rawBags))
+
 	return rawBags
 }
